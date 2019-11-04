@@ -1,0 +1,8 @@
+se\alten\schoolproject\rest\StudentController.class
+se\alten\schoolproject\model\StudentModel.class
+se\alten\schoolproject\transaction\StudentTransactionAccess.class
+se\alten\schoolproject\transaction\StudentTransaction.class
+se\alten\schoolproject\dao\SchoolDataAccess.class
+se\alten\schoolproject\dao\SchoolAccessRemote.class
+se\alten\schoolproject\dao\SchoolAccessLocal.class
+se\alten\schoolproject\entity\Student.class
