@@ -35,9 +35,6 @@ public class StudentController {
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({"application/JSON"})
-    /**
-     * JavaDoc
-     */
     public Response addStudent(String studentModel) { //hämtar model, tar bort som inte ska visas för användaren.
         try {
 
@@ -61,7 +58,7 @@ public class StudentController {
     public Response deleteUser( @PathParam("email") String email) {
         try {
             sal.removeStudent(email);
-            return Response.ok().build();
+            return Response.ok().status(Response.Status.NO_CONTENT).build();
         } catch ( Exception e ) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
