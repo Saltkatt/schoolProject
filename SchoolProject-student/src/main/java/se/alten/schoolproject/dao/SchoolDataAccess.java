@@ -23,13 +23,21 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         return studentTransactionAccess.listAllStudents();
     }
 
+    public List listStudentByName(String firstname) {
+
+        //boolean checkForEmptyVariables = Stream.of(studentToAdd.getFirstname(),).anyMatch(String::isBlank);
+
+        return studentTransactionAccess.listStudentByName(firstname);
+    }
+
+
     @Override
     public StudentModel addStudent(String newStudent) {
         Student studentToAdd = student.toEntity(newStudent);
-        boolean checkForEmptyVariables = Stream.of(studentToAdd.getForename(), studentToAdd.getLastname(), studentToAdd.getEmail()).anyMatch(String::isBlank);
+        boolean checkForEmptyVariables = Stream.of(studentToAdd.getFirstname(), studentToAdd.getLastname(), studentToAdd.getEmail()).anyMatch(String::isBlank);
 
         if (checkForEmptyVariables) {
-            studentToAdd.setForename("empty");
+            studentToAdd.setFirstname("empty");
             return studentModel.toModel(studentToAdd);
         } else {
             studentTransactionAccess.addStudent(studentToAdd);
@@ -43,8 +51,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public void updateStudent(String forename, String lastname, String email) {
-        studentTransactionAccess.updateStudent(forename, lastname, email);
+    public void updateStudent(String firstname, String lastname, String email) {
+        studentTransactionAccess.updateStudent(firstname, lastname, email);
     }
 
     @Override

@@ -2,6 +2,7 @@ package se.alten.schoolproject.rest;
 
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
+import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.model.StudentModel;
 
 import javax.ejb.Stateless;
@@ -31,6 +32,23 @@ public class StudentController {
         }
     }
 
+    @GET
+    @Produces({"application/JSON"})
+    @Path("{firstname}")
+    public Response getStudentByName(@PathParam("firstname") String firstname){
+        try {
+            List student = sal.listStudentByName(firstname);
+            return Response.ok(student).build();
+
+        }catch (IllegalArgumentException e){
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"Name does not exist!\"}").build();
+
+        }catch (Exception e) {
+            e.getMessage();
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -40,7 +58,7 @@ public class StudentController {
 
             StudentModel answer = sal.addStudent(studentModel);
 
-            switch ( answer.getForename()) {
+            switch ( answer.getFirstname()) {
                 case "empty":
                     return Response.status(Response.Status.NOT_ACCEPTABLE).entity("{\"Fill in all details please\"}").build();
                 case "duplicate":
@@ -66,11 +84,11 @@ public class StudentController {
 
     @PUT
     public void updateStudent(
-            @QueryParam("forename") String forename,
+            @QueryParam("firstname") String firstname,
             @QueryParam("lastname") String lastname,
             @QueryParam("email") String email) {
 
-        sal.updateStudent(forename, lastname, email);
+        sal.updateStudent(firstname, lastname, email);
     }
 
     @PATCH

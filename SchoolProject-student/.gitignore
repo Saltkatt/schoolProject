@@ -9,3 +9,43 @@
 # Maven
 log/
 target/
+
+#Key files:
+*.pem
+*.csv
+*.crt
+*.key
+
+#serverless folder
+.serverless
+.serverless/*
+node_modules
+node_modules/*
+*/node_modules
+*/node_modules/*
+
+#enviromental variables for vue
+.env
+*.env
+.env*
+
+#packagedfiles:
+dependency-reduced-pom.xml
+packaged-template.yml
+packaged.yaml
+packaged.yml
+
+#parameters file
+parameters.json
+parameters-old.json
+cf-deploy-old
+
+#user info
+user.json
+file2.txt
+
+#script files:
+fileforupdategateway.json
+
+docker
+pom.xml.versionsBackup

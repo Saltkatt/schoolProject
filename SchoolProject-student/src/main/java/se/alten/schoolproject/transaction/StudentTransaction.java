@@ -1,6 +1,8 @@
 package se.alten.schoolproject.transaction;
 
+
 import se.alten.schoolproject.entity.Student;
+import se.alten.schoolproject.model.StudentModel;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
@@ -8,6 +10,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -19,8 +23,18 @@ public class StudentTransaction implements StudentTransactionAccess{
 
     @Override
     public List listAllStudents() {
-        Query query = entityManager.createQuery("SELECT s from Student s");
+        //return entityManager.createNamedQuery("Student.findAll", Student.class).getResultList();
+        String select = "SELECT s from Student s";
+        Query query = entityManager.createQuery(select);
         return query.getResultList();
+    }
+
+    public List listStudentByName(String student){
+
+        String selectName = "SELECT s FROM Student s WHERE s.firstname = :firstname";
+        Query query = entityManager.createQuery(selectName);
+
+        return query.setParameter("firstname", student).getResultList();
     }
 
     @Override
@@ -30,7 +44,7 @@ public class StudentTransaction implements StudentTransactionAccess{
             entityManager.flush();
             return studentToAdd;
         } catch ( PersistenceException pe ) {
-            studentToAdd.setForename("duplicate");
+            studentToAdd.setFirstname("duplicate");
             return studentToAdd;
         }
     }
@@ -48,9 +62,9 @@ public class StudentTransaction implements StudentTransactionAccess{
     }
 
     @Override
-    public void updateStudent(String forename, String lastname, String email) {
-        Query updateQuery = entityManager.createNativeQuery("UPDATE student SET forename = :forename, lastname = :lastname WHERE email = :email", Student.class);
-        updateQuery.setParameter("forename", forename)
+    public void updateStudent(String firstname, String lastname, String email) {
+        Query updateQuery = entityManager.createNativeQuery("UPDATE student SET firstname = :firstname, lastname = :lastname WHERE email = :email", Student.class);
+        updateQuery.setParameter("firstname", firstname)
                    .setParameter("lastname", lastname)
                    .setParameter("email", email)
                    .executeUpdate();
@@ -61,8 +75,8 @@ public class StudentTransaction implements StudentTransactionAccess{
         Student studentFound = (Student)entityManager.createQuery("SELECT s FROM Student s WHERE s.email = :email")
                 .setParameter("email", student.getEmail()).getSingleResult();
 
-        Query query = entityManager.createQuery("UPDATE Student SET forename = :studentForename WHERE email = :email");
-        query.setParameter("studentForename", student.getForename())
+        Query query = entityManager.createQuery("UPDATE Student SET firstname = :studentFirstname WHERE email = :email");
+        query.setParameter("studentFirstname", student.getFirstname())
                 .setParameter("email", studentFound.getEmail())
                 .executeUpdate();
     }

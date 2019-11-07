@@ -1,7 +1,6 @@
 package se.alten.schoolproject.entity;
 
 import lombok.*;
-import se.alten.schoolproject.model.StudentModel;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -17,14 +16,17 @@ import java.io.StringReader;
 @Getter
 @Setter
 @ToString
+/*@NamedQueries({
+        @NamedQuery(name = "Student.findAll", query = "SELECT s from Student s"
+        )})*/
 public class Student implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "forename")
-    private String forename;
+    @Column(name = "firstname")
+    private String firstname;
 
     @Column(name = "lastname")
     private String lastname;
@@ -38,10 +40,10 @@ public class Student implements Serializable {
         JsonObject jsonObject = reader.readObject();
 
         Student student = new Student();
-        if ( jsonObject.containsKey("forename")) {
-            student.setForename(jsonObject.getString("forename"));
+        if ( jsonObject.containsKey("firstname")) {
+            student.setFirstname(jsonObject.getString("firstname"));
         } else {
-            student.setForename("");
+            student.setFirstname("");
         }
 
         if ( jsonObject.containsKey("lastname")) {
