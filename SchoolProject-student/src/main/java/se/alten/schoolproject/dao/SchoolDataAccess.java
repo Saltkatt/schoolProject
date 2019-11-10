@@ -8,6 +8,8 @@ import se.alten.schoolproject.transaction.StudentTransactionAccess;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -24,20 +26,25 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     StudentTransactionAccess studentTransactionAccess;
 
     @Override
-    public List<Student> listAllStudents()throws IllegalArgumentException{
+    public List<Student> listAllStudents()throws NotFoundException{
+        if(studentTransactionAccess.listAllStudents().size() > 0){
 
-        return studentTransactionAccess.listAllStudents();
+            return studentTransactionAccess.listAllStudents();
+        }
+        else{
+            throw new NotFoundException("List is empty!");
+        }
     }
 
     @Override
-    public List listStudentByName(String firstname){
+    public List findByName(String firstname){
 
-        List<Student> temp = studentTransactionAccess.listAllStudents();
+        List<Student> originalList = studentTransactionAccess.listAllStudents();
         List<Student> findByName = new ArrayList();
 
-        for(Student s: temp) {
+        for(Student s: originalList) {
             if(s.getFirstname().equals(firstname)){
-                    findByName.add(s);
+                findByName.add(s);
             }
         }
         return findByName;
@@ -67,32 +74,40 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
                         studentToAdd.getEmail())
                         .anyMatch(String::isBlank);
 
-       /* if(checkForEmptyVariables){
-            return studentModel.toModel(studentToAdd);
-        }
-       */
 
        if (checkForEmptyVariables) {
             studentToAdd.setFirstname("empty");
             return studentModel.toModel(studentToAdd);
-        } else {
+        } else if (studentToAdd.getEmail().equals(findByEmail(studentToAdd.getEmail()))){
+           studentToAdd.setFirstname("duplicate");
+           return studentModel.toModel(studentToAdd);
+        }else {
             studentTransactionAccess.addStudent(studentToAdd);
             return studentModel.toModel(studentToAdd);
         }
     }
 
     @Override
-    public void removeStudent(String studentEmail) {
-        studentTransactionAccess.removeStudent(studentEmail);
+    public void removeStudent(String studentEmail) throws NotFoundException {
+
+        if(studentEmail.equals(findByEmail(student.getEmail()))){
+            studentTransactionAccess.removeStudent(studentEmail);
+        }
+        else{
+            throw new NotFoundException("Email does not exist!");
+        }
+
     }
 
     @Override
     public void updateStudent(String firstname, String lastname, String email) {
+
         studentTransactionAccess.updateStudent(firstname, lastname, email);
     }
 
     @Override
     public void updateStudentPartial(String studentModel) {
+
         Student studentToUpdate = student.toEntity(studentModel);
         studentTransactionAccess.updateStudentPartial(studentToUpdate);
     }
