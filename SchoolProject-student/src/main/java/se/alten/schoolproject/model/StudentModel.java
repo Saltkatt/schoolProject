@@ -17,7 +17,15 @@ public class StudentModel {
 
     public StudentModel toModel(Student student) {
         StudentModel studentModel = new StudentModel();
-        switch (student.getFirstname()) {
+
+        studentModel.setFirstname(student.getFirstname());
+        studentModel.setLastname(student.getLastname());
+        studentModel.setEmail(student.getEmail());
+
+        return studentModel;
+
+
+    /*    switch (student.getFirstname()) {
             case "empty":
                 studentModel.setFirstname("empty");
                 return studentModel;
@@ -29,6 +37,6 @@ public class StudentModel {
                 studentModel.setLastname(student.getLastname());
                 studentModel.setEmail(student.getEmail());
                 return studentModel;
-        }
+        }*/
     }
 }
