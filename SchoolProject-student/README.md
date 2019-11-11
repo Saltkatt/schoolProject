@@ -42,6 +42,12 @@ GET /student/find/{email}
 add student:
 POST /student/add
 
+{
+	"firstname":"", 
+	"lastname":"",
+	"email": ""
+}
+
 delete student:
 DELETE /student/{email}
 
@@ -50,3 +56,9 @@ PUT /student?firstname={firstname}&lastname={lastname}&email={email}
 
 partial update of firstname:
 PATCH /student/{email}
+
+{
+	"firstname":"input new name", 
+	"lastname":"lastname",
+	"email": "email"
+}
