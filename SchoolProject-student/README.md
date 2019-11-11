@@ -34,7 +34,7 @@ list all students:
 GET /student
 
 list student by name:
-GET /student/find/{firstname}
+GET /student/{firstname}
 
 list student by email:
 GET /student/find/{email}
