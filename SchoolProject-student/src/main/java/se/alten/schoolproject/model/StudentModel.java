@@ -3,6 +3,9 @@ package se.alten.schoolproject.model;
 import lombok.*;
 import se.alten.schoolproject.entity.Student;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,8 +18,25 @@ public class StudentModel {
     private String lastname;
     private String email;
 
+    public List toModelList(List<Student> list){
+        List<StudentModel>modelList = new ArrayList<>();
+
+        list.forEach(temp -> {
+            StudentModel studentModel = new StudentModel();
+            studentModel.setId(null);
+            studentModel.setFirstname(temp.getFirstname());
+            studentModel.setLastname(temp.getLastname());
+            studentModel.setEmail(temp.getEmail());
+            modelList.add(studentModel);
+
+        });
+        return modelList;
+    }
+
     public StudentModel toModel(Student student) {
         StudentModel studentModel = new StudentModel();
+
+        System.out.println(student.toString());
 
         studentModel.setFirstname(student.getFirstname());
         studentModel.setLastname(student.getLastname());
@@ -24,19 +44,5 @@ public class StudentModel {
 
         return studentModel;
 
-
-    /*    switch (student.getFirstname()) {
-            case "empty":
-                studentModel.setFirstname("empty");
-                return studentModel;
-            case "duplicate":
-                studentModel.setFirstname("duplicate");
-                return studentModel;
-            default:
-                studentModel.setFirstname(student.getFirstname());
-                studentModel.setLastname(student.getLastname());
-                studentModel.setEmail(student.getEmail());
-                return studentModel;
-        }*/
     }
 }

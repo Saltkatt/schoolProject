@@ -3,7 +3,6 @@ package se.alten.schoolproject.rest;
 import lombok.NoArgsConstructor;
 
 import se.alten.schoolproject.dao.SchoolAccessLocal;
-import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.model.StudentModel;
 
 import javax.ejb.Stateless;
@@ -13,8 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Stateless //Efter ett anrop gjorts töms minnet
-@NoArgsConstructor // Kräver tom konstruktor, konstruktor, getter & setter - undvik data och toString -
+@Stateless
+@NoArgsConstructor
 @Path("/student")
 public class StudentController {
 
@@ -23,8 +22,8 @@ public class StudentController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response showStudents() {
-        //Ändra så att id inte visas när man hämtar i insomnia: id ska vara null.
+    public Response allStudents() {
+
         try {
             List students = sal.listAllStudents();
             return Response.ok(students).build();
@@ -35,33 +34,38 @@ public class StudentController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/find/{firstname}")
-    public Response getStudentByName(@PathParam("firstname") String firstname){
+    @Path("/{firstname}")
+    public Response studentsByName(@PathParam("firstname") String firstname){
         try {
-            List student = sal.listStudentByName(firstname);
+            StudentModel student = sal.findByName(firstname);
             return Response.ok(student).build();
 
         }catch (Exception e) {
             e.getMessage();
-            return Response.status(Response.Status.CONFLICT).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/find/{email}")
-    public Response getStudentByEmail(@PathParam("email") String email) {
-            List student = sal.findByEmail(email);
+    public Response studentsByEmail(@PathParam("email") String email) {
+
+        try{
+            StudentModel student = sal.findByEmail(email);
             return Response.ok(student).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"Student could not be found\"}").build();
+        }
+
     }
 
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addStudent(String studentModel) { //hämtar model, tar bort som inte ska visas för användaren.
+    public Response addStudent(String studentModel) {
 
-        //URI context
         try {
 
             StudentModel answer = sal.addStudent(studentModel);
@@ -81,13 +85,13 @@ public class StudentController {
 
     @DELETE
     @Path("/{email}")
-    public Response deleteUser( @PathParam("email") String email) {
-            try {
-                sal.removeStudent(email);
-                return Response.ok().status(Response.Status.NO_CONTENT).entity("{\"Student: " + sal.findByEmail(email) + "has been removed!\"}").build();
-            }catch (NotFoundException e){
-                return Response.status(Response.Status.NOT_FOUND).entity("{\"Student could not be found\"}").build();
-            }
+    public Response deleteStudent(@PathParam("email") String email) throws NotFoundException {
+        try {
+            sal.removeStudent(email);
+            return Response.ok().status(Response.Status.NO_CONTENT).build();
+        }catch (NotFoundException e){
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"Student could not be found\"}").build();
+        }
     }
 
     @PUT
@@ -106,14 +110,13 @@ public class StudentController {
 
     @PATCH
     @Path("{email}")
-    public Response updatePartialAStudent(String studentModel) {
+    public Response updateStudentFirstname(String studentModel) {
         try{
             sal.updateStudentPartial(studentModel);
             return Response.ok().status(Response.Status.NO_CONTENT).build();
         }catch (Exception e){
-            return Response.status(Response.Status.BAD_REQUEST).entity("{\"Fill in all details please\"}").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"Fill in all parameters correctly!\"}").build();
         }
     }
 }
 
-//HttpStatus

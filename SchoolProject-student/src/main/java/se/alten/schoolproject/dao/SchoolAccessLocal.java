@@ -12,9 +12,9 @@ public interface SchoolAccessLocal {
 
     List<Student> listAllStudents() throws Exception;
 
-    List findByName(String firstname);
+    StudentModel findByName(String firstname);
 
-    List findByEmail(String email);
+    StudentModel findByEmail(String email);
 
     StudentModel addStudent(String studentModel);
 

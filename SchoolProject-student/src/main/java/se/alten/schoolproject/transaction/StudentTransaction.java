@@ -2,7 +2,6 @@ package se.alten.schoolproject.transaction;
 
 import org.jboss.logging.Logger;
 import se.alten.schoolproject.entity.Student;
-import se.alten.schoolproject.model.StudentModel;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
@@ -10,11 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,19 +24,10 @@ public class StudentTransaction implements StudentTransactionAccess{
 
     @Override
     public List listAllStudents() {
-        //return entityManager.createNamedQuery("Student.findAll", Student.class).getResultList();
         String select = "SELECT s from Student s";
         Query query = entityManager.createQuery(select);
 
         return query.getResultList();
-    }
-
-    public List listStudentByName(String student){
-        String selectName = "SELECT s FROM Student s WHERE s.firstname = :firstname";
-        Query query = entityManager.createQuery(selectName);
-
-        System.out.println(logger);
-        return query.setParameter("firstname", student).getResultList();
     }
 
     @Override
@@ -60,11 +45,7 @@ public class StudentTransaction implements StudentTransactionAccess{
     @Override
     public void removeStudent(String student) {
         String deleteStudent = "DELETE FROM Student s WHERE s.email = :email";
-        //JPQL Query
         Query query = entityManager.createQuery(deleteStudent);
-
-        //Native Query
-        //Query query = entityManager.createNativeQuery("DELETE FROM student WHERE email = :email", Student.class);
 
         query.setParameter("email", student)
              .executeUpdate();

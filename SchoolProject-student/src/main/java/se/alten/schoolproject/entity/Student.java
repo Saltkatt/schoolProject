@@ -6,20 +6,20 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.io.StringReader;
 
-@Entity //Krävs för databas
+@Entity
 @Table(name="student")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-/*@NamedQueries({
-        @NamedQuery(name = "Student.findAll", query = "SELECT s from Student s"
-        )})*/
 public class Student implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -60,4 +60,5 @@ public class Student implements Serializable {
 
         return student;
     }
+
 }

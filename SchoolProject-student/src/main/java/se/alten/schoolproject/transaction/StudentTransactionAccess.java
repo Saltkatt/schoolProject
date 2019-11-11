@@ -10,8 +10,6 @@ import java.util.List;
 public interface StudentTransactionAccess {
     List listAllStudents();
 
-    List listStudentByName(String firstname);
-
     Student addStudent(Student studentToAdd);
 
     void removeStudent(String student);
