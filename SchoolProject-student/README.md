@@ -62,3 +62,12 @@ PATCH /student/{email}
 	"lastname":"lastname",
 	"email": "email"
 }
+
+## Pair programming
+Worked with Filip Christofferson on some of the solutions.
+There are comments in the code indicating where.
+
+## Problems
+Noticed too late that you cannot update the email as the SQL-statement uses WHERE email to update.
+This could be fixed by changing from query parameter to path parameter in update.
+
