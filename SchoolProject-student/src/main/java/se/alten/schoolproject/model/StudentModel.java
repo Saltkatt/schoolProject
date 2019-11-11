@@ -18,6 +18,12 @@ public class StudentModel {
     private String lastname;
     private String email;
 
+    /**
+     * Skapad tillsammans med Filip Christoffersson.
+     * Skapar en lista utan id nummer med hjälp av StudentModel.
+     * @param list
+     * @return
+     */
     public List toModelList(List<Student> list){
         List<StudentModel>modelList = new ArrayList<>();
 

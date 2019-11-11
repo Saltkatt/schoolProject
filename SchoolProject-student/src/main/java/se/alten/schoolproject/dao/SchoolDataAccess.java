@@ -68,6 +68,11 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
 
+    /**
+     * Lösning resultat av parprogrammering med Filip Christoffersson.
+     * @param newStudent
+     * @return
+     */
     @Override
     public StudentModel addStudent(String newStudent) {
 
