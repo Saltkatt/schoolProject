@@ -25,5 +25,28 @@ Write `jboss-cli -c --file=school.cli`
 It should say outcome success. Write `jboss-cli -c --command=:reload` to restart the server.
 
 
+## Port 8095
+http://localhost:8095/school/
 
+## Endpoints
  
+list all students:
+GET /student
+
+list student by name:
+GET /student/find/{firstname}
+
+list student by email:
+GET /student/find/{email}
+
+add student:
+POST /student/add
+
+delete student:
+DELETE /student/{email}
+
+update student:
+PUT /student?firstname={firstname}&lastname={lastname}&email={email}
+
+partial update of firstname:
+PATCH /student/{email}
