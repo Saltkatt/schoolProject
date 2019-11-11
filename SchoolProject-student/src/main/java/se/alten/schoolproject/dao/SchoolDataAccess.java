@@ -31,7 +31,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     public StudentModel findByName(String firstname){
 
         List<Student> originalList = studentTransactionAccess.listAllStudents();
-        StudentModel findByName = new StudentModel();
+        StudentModel findByName;
 
         //For-each loop through originalList,
         for(Student s: originalList) {
@@ -51,7 +51,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     public StudentModel findByEmail(String email){
 
         List<Student> originalList = studentTransactionAccess.listAllStudents();
-        StudentModel findEmail = new StudentModel();
+        StudentModel findEmail;
 
         //For-each loop through originalList,
         for (Student s: originalList) {
@@ -89,7 +89,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
             return studentModel.toModel(studentToAdd);
 
             //if email exists det firstname to "duplicate"
-        } else if (studentToAdd.getEmail().equals(findByEmail(studentToAdd.getEmail()))){
+        } else if (studentToAdd.getEmail().equals(findByEmail(studentToAdd.getEmail()).getEmail())){
             studentToAdd.setFirstname("duplicate");
             return studentModel.toModel(studentToAdd);
             //else add student
@@ -100,7 +100,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public void removeStudent(String studentEmail) throws NotFoundException {
+    public void removeStudent(String studentEmail) {
 
         if(findByEmail(studentEmail).getEmail().equals(studentEmail)) {
             studentTransactionAccess.removeStudent(studentEmail);
@@ -114,7 +114,13 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public void updateStudent(String firstname, String lastname, String email) {
 
-        studentTransactionAccess.updateStudent(firstname, lastname, email);
+        if(email.equals(findByEmail(email).getEmail())){
+            studentTransactionAccess.updateStudent(firstname, lastname, email);
+        }
+        else{
+            throw new BadRequestException();
+        }
+
     }
 
     @Override

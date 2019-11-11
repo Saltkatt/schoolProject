@@ -85,7 +85,7 @@ public class StudentController {
 
     @DELETE
     @Path("/{email}")
-    public Response deleteStudent(@PathParam("email") String email) throws NotFoundException {
+    public Response deleteStudent(@PathParam("email") String email) {
         try {
             sal.removeStudent(email);
             return Response.ok().status(Response.Status.NO_CONTENT).build();
@@ -95,7 +95,7 @@ public class StudentController {
     }
 
     @PUT
-    public Response updateStudent(
+    public Response updateStudent (
             @QueryParam("firstname") String firstname,
             @QueryParam("lastname") String lastname,
             @QueryParam("email") String email) {
@@ -104,7 +104,7 @@ public class StudentController {
             sal.updateStudent(firstname, lastname, email);
             return Response.ok().status(Response.Status.NO_CONTENT).build();
         }catch (Exception e){
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"Check email parameter!\"}").build();
         }
     }
 
