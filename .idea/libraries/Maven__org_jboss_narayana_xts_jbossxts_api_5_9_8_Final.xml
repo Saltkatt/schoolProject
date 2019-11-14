@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.jboss.narayana.xts:jbossxts:api:5.9.8.Final">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/narayana/xts/jbossxts/5.9.8.Final/jbossxts-5.9.8.Final-api.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/narayana/xts/jbossxts/5.9.8.Final/jbossxts-5.9.8.Final-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/narayana/xts/jbossxts/5.9.8.Final/jbossxts-5.9.8.Final-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

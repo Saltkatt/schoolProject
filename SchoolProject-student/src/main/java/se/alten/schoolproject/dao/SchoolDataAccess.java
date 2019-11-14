@@ -1,13 +1,16 @@
 package se.alten.schoolproject.dao;
 
 import se.alten.schoolproject.entity.Student;
+import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.model.StudentModel;
+import se.alten.schoolproject.model.SubjectModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
+import se.alten.schoolproject.transaction.SubjectTransactionAccess;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
-
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -16,10 +19,15 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     private Student student = new Student();
     private StudentModel studentModel = new StudentModel();
+    private Subject subject = new Subject();
+    private SubjectModel subjectModel = new SubjectModel();
 
 
     @Inject
     StudentTransactionAccess studentTransactionAccess;
+
+    @Inject
+    SubjectTransactionAccess subjectTransactionAccess;
 
     @Override
     public List<Student> listAllStudents()throws NotFoundException{
@@ -135,5 +143,17 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
             studentTransactionAccess.updateStudentPartial(studentToUpdate);
         }
 
+    }
+
+    @Override
+    public List listAllSubjects() {
+        return subjectTransactionAccess.listAllSubjects();
+    }
+
+    @Override
+    public SubjectModel addSubject(String newSubject) {
+        Subject subjectToAdd = subject.toEntity(newSubject);
+        subjectTransactionAccess.addSubject(subjectToAdd);
+        return subjectModel.toModel(subjectToAdd);
     }
 }

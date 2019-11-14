@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.jboss.hal:hal-console:resources:3.2.1.Final">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/hal/hal-console/3.2.1.Final/hal-console-3.2.1.Final-resources.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/hal/hal-console/3.2.1.Final/hal-console-3.2.1.Final-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jboss/hal/hal-console/3.2.1.Final/hal-console-3.2.1.Final-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
