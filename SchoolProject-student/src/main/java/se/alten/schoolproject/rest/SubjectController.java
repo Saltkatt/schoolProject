@@ -3,6 +3,7 @@ package se.alten.schoolproject.rest;
 
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
+import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.model.SubjectModel;
 
 import javax.ejb.Stateless;
@@ -21,10 +22,16 @@ public class SubjectController {
     private SchoolAccessLocal sal;
 
     @GET
-    @Produces({"application/JSON"})
+    @Produces(MediaType.APPLICATION_JSON)
     public Response listSubjects() {
         try {
-            List subject = sal.listAllSubjects();
+            //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            List<Subject> subject = sal.listAllSubjects();
+          /*  subject.forEach(t -> {
+                System.out.println(t.getTitle());
+            });*/
+            //System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
             return Response.ok(subject).build();
         } catch ( Exception e ) {
             return Response.status(Response.Status.CONFLICT).build();
@@ -32,8 +39,9 @@ public class SubjectController {
     }
 
     @POST
-    @Produces({"application/JSON"})
+    @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response addSubject(String subject) {
         try {
             SubjectModel subjectModel = sal.addSubject(subject);

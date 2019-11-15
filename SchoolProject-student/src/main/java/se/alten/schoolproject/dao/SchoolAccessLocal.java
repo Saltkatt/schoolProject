@@ -1,6 +1,7 @@
 package se.alten.schoolproject.dao;
 
 import se.alten.schoolproject.entity.Student;
+import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
 
@@ -25,7 +26,7 @@ public interface SchoolAccessLocal {
 
     void updateStudentPartial(String studentModel);
 
-    List listAllSubjects();
+    List<Subject> listAllSubjects();
 
     SubjectModel addSubject(String subjectModel);
 

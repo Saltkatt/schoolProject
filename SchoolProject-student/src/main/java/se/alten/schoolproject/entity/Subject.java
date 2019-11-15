@@ -16,7 +16,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Subject implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -27,7 +26,7 @@ public class Subject implements Serializable {
     @Column
     private String title;
 
-    @ManyToMany(mappedBy = "subject", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "subject", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<Student> students = new HashSet<>();
 
     public Subject toEntity(String subjectModel) {
@@ -37,9 +36,9 @@ public class Subject implements Serializable {
 
         Subject subject = new Subject();
 
-        if ( jsonObject.containsKey("subject")) {
+        if ( jsonObject.containsKey("title")) {
+            subject.setTitle(jsonObject.getString("title"));
 
-            subject.setTitle(jsonObject.getString("subject"));
         } else {
             subject.setTitle("");
         }

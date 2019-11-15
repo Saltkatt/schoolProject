@@ -13,7 +13,6 @@ import java.util.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Student implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -49,8 +48,8 @@ public class Student implements Serializable {
         JsonObject jsonObject = reader.readObject();
 
         Student student = new Student();
-        if ( jsonObject.containsKey("forename")) {
-            student.setFirstname(jsonObject.getString("forename"));
+        if ( jsonObject.containsKey("firstname")) {
+            student.setFirstname(jsonObject.getString("firstname"));
         } else {
             student.setFirstname("");
         }

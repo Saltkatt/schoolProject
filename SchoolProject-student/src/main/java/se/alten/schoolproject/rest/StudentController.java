@@ -25,9 +25,16 @@ public class StudentController {
     public Response allStudents() {
 
         try {
+            //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             List students = sal.listAllStudents();
+            //System.out.println(students);
+            //System.out.println("######################################################################");
             return Response.ok(students).build();
-        } catch ( Exception e ) {
+        }
+        /*catch (BadRequestException e) {
+            return ExceptionResponse.getResponse()
+        }*/
+        catch ( Exception e ) {
             return Response.status(Response.Status.CONFLICT).build();
         }
     }

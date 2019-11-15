@@ -16,7 +16,8 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 
     @Override
     public List listAllSubjects() {
-        Query query = entityManager.createQuery("SELECT s FROM Subject s");
+        String select = "SELECT s FROM Subject s";
+        Query query = entityManager.createQuery(select);
         return query.getResultList();
     }
 

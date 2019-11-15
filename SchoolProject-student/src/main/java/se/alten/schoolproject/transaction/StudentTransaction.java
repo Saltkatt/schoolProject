@@ -26,7 +26,6 @@ public class StudentTransaction implements StudentTransactionAccess{
     public List listAllStudents() {
         String select = "SELECT s from Student s";
         Query query = entityManager.createQuery(select);
-
         return query.getResultList();
     }
 
