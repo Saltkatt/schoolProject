@@ -1,7 +1,6 @@
 package se.alten.schoolproject.transaction;
 
 import se.alten.schoolproject.entity.Student;
-import se.alten.schoolproject.model.StudentModel;
 
 import javax.ejb.Local;
 import java.util.List;

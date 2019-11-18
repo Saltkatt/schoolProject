@@ -1,5 +1,6 @@
 package se.alten.schoolproject.rest;
 
+
 import javax.ws.rs.core.Response;
 
 public class ExceptionResponse {

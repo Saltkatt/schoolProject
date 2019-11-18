@@ -4,6 +4,7 @@ import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
+import se.alten.schoolproject.model.TeacherModel;
 
 import javax.ejb.Local;
 import javax.ws.rs.NotFoundException;
@@ -29,5 +30,13 @@ public interface SchoolAccessLocal {
     List<Subject> listAllSubjects();
 
     SubjectModel addSubject(String subjectModel);
+
+    List listAllTeachers();
+
+    TeacherModel findTeacherByEmail(String email);
+
+    TeacherModel addTeacher(String teacherModel);
+
+    void removeTeacher(String teacher);
 
 }

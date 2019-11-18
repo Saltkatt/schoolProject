@@ -8,13 +8,12 @@ import java.io.StringReader;
 import java.util.*;
 
 @Entity
-@Table(name="student")
+@Table(name="teacher")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Student implements Serializable {
-
+public class Teacher implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -32,51 +31,51 @@ public class Student implements Serializable {
     private String email;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinTable(name = "student_subject",
-            joinColumns=@JoinColumn(name="stud_id", referencedColumnName = "id"),
+    @JoinTable(name = "teacher_subject",
+            joinColumns=@JoinColumn(name="teach_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"))
     private Set<Subject> subject = new HashSet<>();
 
     @Transient
     private List<String> subjects = new ArrayList<>();
 
-    public Student toEntity(String studentModel) {
+    public Teacher toEntity(String teacherModel) {
 
         List<String> temp = new ArrayList<>();
 
-        JsonReader reader = Json.createReader(new StringReader(studentModel));
+        JsonReader reader = Json.createReader(new StringReader(teacherModel));
 
         JsonObject jsonObject = reader.readObject();
 
-        Student student = new Student();
+        Teacher teacher = new Teacher();
         if ( jsonObject.containsKey("firstname")) {
-            student.setFirstname(jsonObject.getString("firstname"));
+            teacher.setFirstname(jsonObject.getString("firstname"));
         } else {
-            student.setFirstname("");
+            teacher.setFirstname("");
         }
 
         if ( jsonObject.containsKey("lastname")) {
-            student.setLastname(jsonObject.getString("lastname"));
+            teacher.setLastname(jsonObject.getString("lastname"));
         } else {
-            student.setLastname("");
+            teacher.setLastname("");
         }
 
         if ( jsonObject.containsKey("email")) {
-            student.setEmail(jsonObject.getString("email"));
+            teacher.setEmail(jsonObject.getString("email"));
         } else {
-            student.setEmail("");
+            teacher.setEmail("");
         }
 
         if (jsonObject.containsKey("subject")) {
             JsonArray jsonArray = jsonObject.getJsonArray("subject");
             for ( int i = 0; i < jsonArray.size(); i++ ){
                 temp.add(jsonArray.get(i).toString().replace("\"", ""));
-                student.setSubjects(temp);
+                teacher.setSubjects(temp);
             }
         } else {
-            student.setSubjects(null);
+            teacher.setSubjects(null);
         }
 
-        return student;
+        return teacher;
     }
 }

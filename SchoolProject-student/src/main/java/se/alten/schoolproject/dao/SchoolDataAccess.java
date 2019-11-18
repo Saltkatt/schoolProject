@@ -2,10 +2,13 @@ package se.alten.schoolproject.dao;
 
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
+import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
+import se.alten.schoolproject.model.TeacherModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
 import se.alten.schoolproject.transaction.SubjectTransactionAccess;
+import se.alten.schoolproject.transaction.TeacherTransactionAccess;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -21,6 +24,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     private StudentModel studentModel = new StudentModel();
     private Subject subject = new Subject();
     private SubjectModel subjectModel = new SubjectModel();
+    private Teacher teacher = new Teacher();
+    private TeacherModel teacherModel = new TeacherModel();
 
 
     @Inject
@@ -28,6 +33,11 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Inject
     SubjectTransactionAccess subjectTransactionAccess;
+
+    @Inject
+    TeacherTransactionAccess teacherTransactionAccess;
+
+
 
     @Override
     public List<Student> listAllStudents()throws NotFoundException{
@@ -172,4 +182,76 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         subjectTransactionAccess.addSubject(subjectToAdd);
         return subjectModel.toModel(subjectToAdd);
     }
+
+    @Override
+    public List listAllTeachers() {
+      return teacherModel.toModelList(teacherTransactionAccess.listAllTeachers());
+    }
+
+    @Override
+    public TeacherModel findTeacherByEmail(String email){
+
+        List<Teacher> originalList = teacherTransactionAccess.listAllTeachers();
+        TeacherModel findEmail;
+
+        //For-each loop through originalList,
+        for (Teacher t: originalList) {
+            //if email from orginalList equals input email,
+            if(t.getEmail().equals(email)){
+                //put information s in a new teacherModel
+                findEmail = teacherModel.toModel(t);
+                //return the new model
+                return findEmail;
+            }
+        }
+        //if not equal to email return empty model
+        return findEmail = new TeacherModel();
+    }
+
+    @Override
+    public TeacherModel addTeacher(String newTeacher) {
+
+        Teacher teacherToAdd = teacher.toEntity(newTeacher);
+
+        boolean checkForEmptyVariables =
+                Stream.of(teacherToAdd.getFirstname(),
+                        teacherToAdd.getLastname(),
+                        teacherToAdd.getEmail())
+                        .anyMatch(String::isBlank);
+
+        //if boolean is true set firstname to "empty"
+        if (checkForEmptyVariables) {
+            teacherToAdd.setFirstname("empty");
+            return teacherModel.toModel(teacherToAdd);
+
+            //if email exists det firstname to "duplicate"
+        } else if (teacherToAdd.getEmail().equals(findByEmail(teacherToAdd.getEmail()).getEmail())){
+            teacherToAdd.setFirstname("duplicate");
+            return teacherModel.toModel(teacherToAdd);
+            //else add student
+        }else {
+            teacherTransactionAccess.addTeacher(teacherToAdd);
+
+            List<Subject> subjects = subjectTransactionAccess.getSubjectByName(teacherToAdd.getSubjects());
+
+            subjects.forEach(sub -> {
+                teacherToAdd.getSubject().add(sub);
+            });
+
+            return teacherModel.toModel(teacherToAdd);
+        }
+    }
+
+    @Override
+    public void removeTeacher(String teacherEmail) {
+
+        if(findTeacherByEmail(teacherEmail).getEmail().equals(teacherEmail)) {
+            teacherTransactionAccess.removeTeacher(teacherEmail);
+        }
+        else{
+            throw new NotFoundException();
+        }
+
+    }
+
 }

@@ -27,6 +27,10 @@ public class Subject implements Serializable {
     private String title;
 
     @ManyToMany(mappedBy = "subject", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    /*@JoinTable(name = "subject_students",
+            joinColumns=@JoinColumn(name="subj_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "stud_id", referencedColumnName = "id"))*/
+    
     private Set<Student> students = new HashSet<>();
 
     public Subject toEntity(String subjectModel) {
