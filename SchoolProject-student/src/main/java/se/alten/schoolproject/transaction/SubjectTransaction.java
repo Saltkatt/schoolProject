@@ -42,4 +42,17 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 
         return query.getResultList();
     }
+
+   /* @Override
+    public void updateSubjectPartial(Subject subject) {
+        String selectStudentToUpdate = "SELECT s FROM Subject s WHERE s.title = :title";
+        String updateStudent = "UPDATE Subject SET firstname = :studentFirstname WHERE email = :email";
+        Student studentFound = (Student)entityManager.createQuery(selectStudentToUpdate)
+                .setParameter("email", student.getEmail()).getSingleResult();
+
+        Query query = entityManager.createQuery(updateFirstName);
+        query.setParameter("studentFirstname", student.getFirstname())
+                .setParameter("email", studentFound.getEmail())
+                .executeUpdate();
+    }*/
 }

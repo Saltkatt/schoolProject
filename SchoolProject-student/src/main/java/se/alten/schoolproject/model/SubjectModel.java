@@ -10,13 +10,20 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class SubjectModel {
+
     private Long id;
     private String title;
+    private String students;
 
     public SubjectModel toModel(Subject subjectToAdd) {
         SubjectModel subjectModel = new SubjectModel();
         subjectModel.setTitle(subjectToAdd.getTitle());
+        subjectToAdd.getStudentSet().forEach(student -> {
+            subjectModel.setStudents(students);
+        });
+
         return subjectModel;
     }
 

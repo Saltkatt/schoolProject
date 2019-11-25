@@ -1,6 +1,8 @@
 package se.alten.schoolproject.entity;
 
 import lombok.*;
+import se.alten.schoolproject.model.StudentModel;
+
 import javax.json.*;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,18 +33,21 @@ public class Student implements Serializable {
     @Column(name = "email", unique = true)
     private String email;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinTable(name = "student_subject",
-            joinColumns=@JoinColumn(name="stud_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "subj_id", referencedColumnName = "id"))
-    private Set<Subject> subject = new HashSet<>();
+    @ManyToMany(mappedBy = "studentSet", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Set<Subject> subjectSet = new HashSet<>();
 
-    @Transient
-    private List<String> subjects = new ArrayList<>();
+    public Student toEntity(StudentModel studentModel) {
+
+        Student student = new Student();
+        student.setFirstname(studentModel.getFirstname());
+        student.setLastname(studentModel.getLastname());
+        student.setEmail(studentModel.getEmail());
+        student.setId(studentModel.getId());
+
+        return student;
+    }
 
     public Student toEntity(String studentModel) {
-
-        List<String> temp = new ArrayList<>();
 
         JsonReader reader = Json.createReader(new StringReader(studentModel));
 
@@ -65,16 +70,6 @@ public class Student implements Serializable {
             student.setEmail(jsonObject.getString("email"));
         } else {
             student.setEmail("");
-        }
-
-        if (jsonObject.containsKey("subject")) {
-            JsonArray jsonArray = jsonObject.getJsonArray("subject");
-            for ( int i = 0; i < jsonArray.size(); i++ ){
-                temp.add(jsonArray.get(i).toString().replace("\"", ""));
-                student.setSubjects(temp);
-            }
-        } else {
-            student.setSubjects(null);
         }
 
         return student;

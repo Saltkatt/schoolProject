@@ -1,10 +1,8 @@
 package se.alten.schoolproject.dao;
 
 import se.alten.schoolproject.entity.Student;
-import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
-import se.alten.schoolproject.model.TeacherModel;
 
 import javax.ejb.Local;
 import javax.ws.rs.NotFoundException;
@@ -27,16 +25,13 @@ public interface SchoolAccessLocal {
 
     void updateStudentPartial(String studentModel);
 
-    List<Subject> listAllSubjects();
+    List<SubjectModel> listAllSubjects();
+
+    SubjectModel getSubjectByName(String title);
 
     SubjectModel addSubject(String subjectModel);
 
-    List listAllTeachers();
+    void updateSubjectPartial(String title, String studentEmail);
 
-    TeacherModel findTeacherByEmail(String email);
-
-    TeacherModel addTeacher(String teacherModel);
-
-    void removeTeacher(String teacher);
 
 }

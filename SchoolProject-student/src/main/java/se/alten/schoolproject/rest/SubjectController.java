@@ -3,7 +3,6 @@ package se.alten.schoolproject.rest;
 
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
-import se.alten.schoolproject.entity.Subject;
 import se.alten.schoolproject.model.SubjectModel;
 
 import javax.ejb.Stateless;
@@ -25,16 +24,29 @@ public class SubjectController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response listSubjects() {
         try {
-            //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-            List<Subject> subject = sal.listAllSubjects();
-          /*  subject.forEach(t -> {
-                System.out.println(t.getTitle());
-            });*/
-            //System.out.println("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤");
+            List<SubjectModel> subject = sal.listAllSubjects();
+            subject.forEach(t -> {
+                System.out.println(t.getTitle() + " from List forEach in Controller");
+            });
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             return Response.ok(subject).build();
         } catch ( Exception e ) {
             return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{title}")
+    public Response listSubjectByTitle(@PathParam("title") String title) {
+        try {
+            SubjectModel findSubject = sal.getSubjectByName(title);
+            return Response.ok(findSubject).build();
+        } catch (Exception e) {
+            e.getMessage();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
@@ -49,5 +61,27 @@ public class SubjectController {
         } catch (Exception e ) {
             return Response.status(404).build();
         }
+    }
+
+    @PATCH
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("{title}")
+    public Response partialUpdate(@PathParam("title") String title, String studentEmail){
+        //update teacher and students.
+        //studentemail
+        try{
+           sal.updateSubjectPartial(title, studentEmail);
+            return Response.ok().build();
+        }catch (BadRequestException e){
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"Subject could not be found\"}").build();
+
+        }
+
+    }
+
+    @DELETE
+    @Path("{title}")
+    public Response deleteSubject(){
+        return null;
     }
 }

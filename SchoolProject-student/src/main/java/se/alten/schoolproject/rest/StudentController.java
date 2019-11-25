@@ -25,10 +25,10 @@ public class StudentController {
     public Response allStudents() {
 
         try {
-            //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            System.out.println("GETGETGETGETGETGETGETGETGETGETGETGET!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             List students = sal.listAllStudents();
-            //System.out.println(students);
-            //System.out.println("######################################################################");
+            System.out.println(students);
+            System.out.println("ENDOFGET///////////////////////////////////////////////////////////////");
             return Response.ok(students).build();
         }
         /*catch (BadRequestException e) {
@@ -74,7 +74,7 @@ public class StudentController {
     public Response addStudent(String studentModel) {
 
         try {
-
+            System.out.println("POSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOSTPOST");
             StudentModel answer = sal.addStudent(studentModel);
 
             switch ( answer.getFirstname()) {
@@ -83,8 +83,10 @@ public class StudentController {
                 case "duplicate":
                     return Response.status(Response.Status.EXPECTATION_FAILED).entity("{\"Email already registered!\"}").build();
                 default:
+                    System.out.println("ENDOFPOSTENDOFPOSTENDOFPOSTENDOFPOSTENDOFPOSTENDOFPOSTENDOFPOSTENDOFPOST");
                     return Response.ok(answer).build();
             }
+
         } catch ( Exception e ) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
