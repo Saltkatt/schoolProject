@@ -30,6 +30,15 @@ public class SubjectTransaction implements SubjectTransactionAccess{
     }
 
     @Override
+    public void removeSubject(String subject) {
+        String deleteSubject = "DELETE FROM Subject s WHERE s.title = :title";
+        Query query = entityManager.createQuery(deleteSubject);
+
+        query.setParameter("title", subject)
+                .executeUpdate();
+    }
+
+    @Override
     public Subject addSubject(Subject subject) {
         try {
             entityManager.persist(subject);
@@ -64,7 +73,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 */
 
    /* @Override
-    public void updateSubjectPartial(Subject subject) {
+    public void addStudentToSubject(Subject subject) {
         String selectStudentToUpdate = "SELECT s FROM Subject s WHERE s.title = :title";
         String updateStudent = "UPDATE Subject SET firstname = :studentFirstname WHERE email = :email";
         Student studentFound = (Student)entityManager.createQuery(selectStudentToUpdate)

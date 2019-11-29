@@ -67,11 +67,10 @@ public class SubjectController {
     @PATCH
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{title}")
-    public Response partialUpdate(@PathParam("title") String title, String studentEmail){
-        //update teacher and students.
-        //studentemail
+    public Response updateJoinTable(@PathParam("title") String title, String studentEmail){
+
         try{
-           sal.updateSubjectPartial(title, studentEmail);
+           sal.addStudentToSubject(title, studentEmail);
             return Response.ok().build();
         }catch (BadRequestException e){
             return Response.status(Response.Status.NOT_FOUND).entity("{\"Subject could not be found\"}").build();
@@ -82,7 +81,13 @@ public class SubjectController {
 
     @DELETE
     @Path("{title}")
-    public Response deleteSubject(){
-        return null;
+    public Response deleteSubject(@PathParam("title") String title){
+
+        try {
+            sal.removeSubject(title);
+            return Response.ok().status(Response.Status.NO_CONTENT).build();
+        }catch (NotFoundException e){
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"Subject could not be found\"}").build();
+        }
     }
 }

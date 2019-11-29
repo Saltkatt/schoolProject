@@ -11,5 +11,6 @@ public interface SubjectTransactionAccess {
     List listAllSubjects();
     Subject addSubject(Subject subject);
     Subject listSubjectsByTitle(String title);
+    void removeSubject(String title);
     //List listSubjectsByTitle(String title);
 }

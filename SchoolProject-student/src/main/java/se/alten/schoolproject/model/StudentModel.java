@@ -5,7 +5,9 @@ import lombok.*;
 import se.alten.schoolproject.entity.Student;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,7 +20,7 @@ public class StudentModel {
     private String firstname;
     private String lastname;
     private String email;
-    private String subjects;
+    private Set<String> subjects = new HashSet<>();
 
     /**
      * Skapad tillsammans med Filip Christoffersson.
@@ -43,9 +45,9 @@ public class StudentModel {
             sm.setFirstname(temp.getFirstname());
             sm.setLastname(temp.getLastname());
             sm.setEmail(temp.getEmail());
-          /*  temp.getSubject().forEach(subject -> {
+            temp.getSubjectSet().forEach(subject -> {
                 sm.subjects.add(subject.getTitle());
-            });*/
+            });
             modelList.add(sm);
 
         });
@@ -59,22 +61,11 @@ public class StudentModel {
         studentModel.setFirstname(student.getFirstname());
         studentModel.setLastname(student.getLastname());
         studentModel.setEmail(student.getEmail());
-   /*     student.getSubject().forEach(subject -> {
-            studentModel.subjects.add(subject.getTitle());
+        student.getSubjectSet().forEach(s ->{
+            studentModel.subjects.add(s.getTitle());
         });
-*/
+
         return studentModel;
     }
 
-  /*  public StudentModel toSubjectModel(Student student) {
-        StudentModel studentModel = new StudentModel();
-
-        studentModel.setFirstname(student.getFirstname());
-        studentModel.setLastname(student.getLastname());
-        student.getSubject().forEach(subject -> {
-            studentModel.subjects.add(subject.getTitle());
-        });
-
-        return studentModel;
-    }*/
 }

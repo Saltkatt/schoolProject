@@ -36,6 +36,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public List<Student> listAllStudents()throws NotFoundException{
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         return studentModel.toModelList(studentTransactionAccess.listAllStudents());
     }
@@ -80,15 +81,15 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         return findEmail = new StudentModel();
     }
 
+    /**
+     * Method used in addStudentToSubject() to allow for join table.
+     * @param email
+     * @return
+     */
     @Override
     public Student getStudentByEmail(String email){
 
         Student foundStudent = studentTransactionAccess.studentByEmail(email);
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-
-        System.out.println(foundStudent.toString());
-
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 
         return foundStudent;
     }
@@ -174,9 +175,12 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public List<SubjectModel> listAllSubjects() {
 
+        System.out.println("##############################################################################################");
         List<Subject> sm = subjectTransactionAccess.listAllSubjects();
         sm.forEach(t -> {
                 System.out.println(t.getTitle() + " from List in SchoolDataAccess");
+                System.out.println(t.getStudentSet() + "from List in SchoolDataAccess\"");
+                System.out.println(t.toString() + "from List in SchoolDataAccess\"");
             return ;
             });
 
@@ -185,6 +189,11 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         return t;
     }
 
+    /**
+     * Only used in addStudentToSubject()
+     * @param title
+     * @return
+     */
     @Override
     public Subject listSubjectsByName(String title){
 
@@ -228,13 +237,11 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public void updateSubjectPartial(String title, String studentEmail) {
+    public void addStudentToSubject(String title, String studentEmail) {
 
         /**
-         * Todo: Lägga till en student till ett subject.
-         * Todo: Subject toEntity behöver kunna ta emot ett student objekt.
          * Todo: updatePartialSubject ska uppdatera subject genom att lägga till eller ta bort ett student/teacher objekt.
-         *
+         * Todo: Retrieve subjects via student and vice versa.
          */
 
        String email = "No email";
@@ -245,10 +252,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         if (jsonObject.containsKey("email")) {
             JsonValue jsonValue = jsonObject.getValue("/email");
             email = jsonValue.toString().replace("\"", "");
-            System.out.println("JSON re-write: " + email + " ---------------------------------------------------------");
         }
 
-        //Subject subject = subject.toEntity(listSubjectsByName(title));
         Student student = getStudentByEmail(email);
         Subject subject = listSubjectsByName(title);
 
@@ -256,5 +261,15 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     }
 
+    @Override
+    public void removeSubject(String subjectTitle) throws NotFoundException {
+        //todo: check still works
+        if(getSubjectByName(subjectTitle).getTitle().equals(subjectTitle)) {
+            subjectTransactionAccess.removeSubject(subjectTitle);
+        }
+        else{
+            throw new NotFoundException();
+        }
+    }
 
 }

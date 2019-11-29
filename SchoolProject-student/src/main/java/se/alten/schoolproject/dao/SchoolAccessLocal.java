@@ -36,7 +36,9 @@ public interface SchoolAccessLocal {
 
     SubjectModel addSubject(String subjectModel);
 
-    void updateSubjectPartial(String title, String studentEmail);
+    void addStudentToSubject(String title, String studentEmail);
+
+    void removeSubject(String subject) throws NotFoundException;
 
 
 }
