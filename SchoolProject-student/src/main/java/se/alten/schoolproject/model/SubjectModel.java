@@ -19,6 +19,7 @@ public class SubjectModel {
 
     public SubjectModel toModel(Subject subjectToAdd) {
         SubjectModel subjectModel = new SubjectModel();
+        subjectModel.setId(subjectToAdd.getId());
         subjectModel.setTitle(subjectToAdd.getTitle());
         subjectToAdd.getStudentSet().forEach(student -> {
             subjectModel.setStudents(students);

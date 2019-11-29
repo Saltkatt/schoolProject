@@ -60,6 +60,7 @@ public class StudentController {
 
         try{
             StudentModel student = sal.findByEmail(email);
+            System.out.println("%%%%%%%%%%%%%%%%%% " + student + " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
             return Response.ok(student).build();
         }catch (Exception e){
             return Response.status(Response.Status.NOT_FOUND).entity("{\"Student could not be found\"}").build();

@@ -57,6 +57,7 @@ public class StudentModel {
     public StudentModel toModel(Student student) {
         StudentModel studentModel = new StudentModel();
 
+        studentModel.setId(student.getId());
         studentModel.setFirstname(student.getFirstname());
         studentModel.setLastname(student.getLastname());
         studentModel.setEmail(student.getEmail());

@@ -213,7 +213,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         JsonReader reader = Json.createReader(new StringReader(studentEmail));
         JsonObject jsonObject = reader.readObject();
-        Subject subject = new Subject();
 
         if (jsonObject.containsKey("email")) {
             JsonValue jsonValue = jsonObject.getValue("/email");
@@ -223,43 +222,18 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         SubjectModel subjectRetrieved = getSubjectByName(title);
         StudentModel studentFound = findByEmail(email);
-
         Subject sub = subject.toEntity(subjectRetrieved);
         //student entity
         Student stud = student.toEntity(studentFound);
         //spara mot databas med .add
         sub.getStudentSet().add(stud);
+        System.out.println("////////////////////////////// " + studentFound.getEmail() + " ///////////////////////////////////");
+        System.out.println("////////////////////////////// " + studentFound.getFirstname() + " ///////////////////////////////////");
+        System.out.println("////////////////////////////// " + studentFound.getId() + " ///////////////////////////////////");
+        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%" + subjectRetrieved + "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" );
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@" + sub + "@@@@@@@@@@@@@@@@@@@");
+        //System.out.println("###################### " + student.toString() + " ################");
 
-        
-
-
-        /*System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Beginning of updatePartial!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        SubjectModel subjectName = getSubjectByName(title);
-        String email = "No email";
-
-        JsonReader reader = Json.createReader(new StringReader(studentEmail));
-        JsonObject jsonObject = reader.readObject();
-        Subject subject = new Subject();
-
-        if (jsonObject.containsKey("email")) {
-            JsonValue jsonValue = jsonObject.getValue("/email");
-            email = jsonValue.toString().replace("\"", "");
-            System.out.println("JSON re-write: " + email + " ---------------------------------------------------------");
-        }
-
-        StudentModel stu = findByEmail(email);
-        Student test = student.toEntity(stu);
-
-        List<Student> studentsWithSubjects = new ArrayList<>();
-        //subjectName.getStudentSet().add(test);
-
-        subject.getStudentSet().add(test);
-
-
-        System.out.println("subjectName: " + subjectName);
-
-        System.out.println("----------------------------------- Before return ----------------------------------");*/
 
     }
 
