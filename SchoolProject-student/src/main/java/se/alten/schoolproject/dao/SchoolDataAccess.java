@@ -2,10 +2,13 @@ package se.alten.schoolproject.dao;
 
 import se.alten.schoolproject.entity.Student;
 import se.alten.schoolproject.entity.Subject;
+import se.alten.schoolproject.entity.Teacher;
 import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.SubjectModel;
+import se.alten.schoolproject.model.TeacherModel;
 import se.alten.schoolproject.transaction.StudentTransactionAccess;
 import se.alten.schoolproject.transaction.SubjectTransactionAccess;
+import se.alten.schoolproject.transaction.TeacherTransactionAccess;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -27,6 +30,8 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     private StudentModel studentModel = new StudentModel();
     private Subject subject = new Subject();
     private SubjectModel subjectModel = new SubjectModel();
+    private Teacher teacher = new Teacher();
+    private TeacherModel teacherModel = new TeacherModel();
 
     @Inject
     StudentTransactionAccess studentTransactionAccess;
@@ -34,11 +39,54 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Inject
     SubjectTransactionAccess subjectTransactionAccess;
 
+    @Inject
+    TeacherTransactionAccess teacherTransactionAccess;
+
     @Override
     public List<Student> listAllStudents()throws NotFoundException{
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         return studentModel.toModelList(studentTransactionAccess.listAllStudents());
+    }
+
+    @Override
+    public List<Teacher> listAllTeachers() throws Exception {
+        return teacherModel.toModelList(teacherTransactionAccess.listAllTeachers());
+    }
+
+    @Override
+    public Teacher getTeacherByEmail(String email) {
+
+        Teacher foundTeacher = teacherTransactionAccess.findTeacherByEmail(email);
+
+        return foundTeacher;
+    }
+
+    @Override
+    public TeacherModel addTeacher(String newTeacher) {
+        Teacher teacherToAdd = teacher.toEntity(newTeacher);
+
+        boolean checkForEmptyVariables =
+                Stream.of(teacherToAdd.getFirstname(),
+                        teacherToAdd.getLastname(),
+                        teacherToAdd.getEmail())
+                        .anyMatch(String::isBlank);
+
+        //if boolean is true set firstname to "empty"
+        if (checkForEmptyVariables) {
+            teacherToAdd.setFirstname("empty");
+            return teacherModel.toModel(teacherToAdd);
+
+            //if email exists det firstname to "duplicate"
+        } else if (teacherToAdd.getEmail().equals(findByEmail(teacherToAdd.getEmail()).getEmail())){
+            teacherToAdd.setFirstname("duplicate");
+            return teacherModel.toModel(teacherToAdd);
+            //else add student
+        }else {
+            teacherTransactionAccess.addTeacher(teacherToAdd);
+            return teacherModel.toModel(teacherToAdd);
+        }
+
     }
 
     @Override
@@ -104,6 +152,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     public StudentModel addStudent(String newStudent) {
 
         Student studentToAdd = student.toEntity(newStudent);
+
         boolean checkForEmptyVariables =
                 Stream.of(studentToAdd.getFirstname(),
                         studentToAdd.getLastname(),
@@ -121,11 +170,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
             return studentModel.toModel(studentToAdd);
             //else add student
         }else {
-     /*       List<Subject> subjects = subjectTransactionAccess.getSubjectByName(studentToAdd.getSubjects());
-
-            subjects.forEach(sub -> {
-                studentToAdd.getSubject().add(sub);
-            });*/
 
             studentTransactionAccess.addStudent(studentToAdd);
 
@@ -178,11 +222,11 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         System.out.println("##############################################################################################");
         List<Subject> sm = subjectTransactionAccess.listAllSubjects();
         sm.forEach(t -> {
-                System.out.println(t.getTitle() + " from List in SchoolDataAccess");
-                System.out.println(t.getStudentSet() + "from List in SchoolDataAccess\"");
-                System.out.println(t.toString() + "from List in SchoolDataAccess\"");
+            System.out.println(t.getTitle() + " from List in SchoolDataAccess");
+            System.out.println(t.getStudentSet() + "from List in SchoolDataAccess\"");
+            System.out.println(t.toString() + "from List in SchoolDataAccess\"");
             return ;
-            });
+        });
 
         List<SubjectModel> t = subjectModel.toModelList(subjectTransactionAccess.listAllSubjects());
 
@@ -229,9 +273,9 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         subjectTransactionAccess.addSubject(subjectToAdd);
         List<Student> studentsWithSubjects = new ArrayList<>();
 
-            studentsWithSubjects.forEach(student -> {
-                subjectToAdd.getStudentSet().add(student);
-            });
+        studentsWithSubjects.forEach(student -> {
+            subjectToAdd.getStudentSet().add(student);
+        });
 
         return subjectModel.toModel(subjectToAdd);
     }
@@ -239,12 +283,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public void addStudentToSubject(String title, String studentEmail) {
 
-        /**
-         * Todo: updatePartialSubject ska uppdatera subject genom att lägga till eller ta bort ett student/teacher objekt.
-         * Todo: Retrieve subjects via student and vice versa.
-         */
-
-       String email = "No email";
+        String email = "No email";
 
         JsonReader reader = Json.createReader(new StringReader(studentEmail));
         JsonObject jsonObject = reader.readObject();
@@ -271,5 +310,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
             throw new NotFoundException();
         }
     }
+
+
 
 }

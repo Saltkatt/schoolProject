@@ -40,8 +40,17 @@ public class Subject implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
     private Set<Student> studentSet = new HashSet<>();
 
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(name = "subject_teacher",
+            joinColumns=@JoinColumn(name="subject_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"))
+    private Set<Student> teacherSet = new HashSet<>();
+
     @Transient
     private List<String> studentsTransList = new ArrayList<>();
+
+    @Transient
+    private List<String> teachersTransList = new ArrayList<>();
 
     public Subject toEntity(SubjectModel subjectModel){
 
@@ -76,6 +85,16 @@ public class Subject implements Serializable {
             }
         } else {
             subject.setStudentsTransList(null);
+        }
+
+        if (jsonObject.containsKey("teacherSet")) {
+            JsonArray jsonArray = jsonObject.getJsonArray("teacherSet");
+            for ( int i = 0; i < jsonArray.size(); i++ ){
+                temp.add(jsonArray.get(i).toString().replace("\"", ""));
+                subject.setTeachersTransList(temp);
+            }
+        } else {
+            subject.setTeachersTransList(null);
         }
 
         return subject;
