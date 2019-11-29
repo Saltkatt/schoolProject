@@ -1,10 +1,7 @@
 package se.alten.schoolproject.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import se.alten.schoolproject.entity.Student;
 
 import java.util.ArrayList;
@@ -14,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class StudentModel {
 
     private Long id;
@@ -45,7 +43,7 @@ public class StudentModel {
             sm.setFirstname(temp.getFirstname());
             sm.setLastname(temp.getLastname());
             sm.setEmail(temp.getEmail());
-           /* temp.getSubject().forEach(subject -> {
+          /*  temp.getSubject().forEach(subject -> {
                 sm.subjects.add(subject.getTitle());
             });*/
             modelList.add(sm);

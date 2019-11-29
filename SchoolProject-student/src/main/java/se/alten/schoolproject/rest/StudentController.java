@@ -59,9 +59,9 @@ public class StudentController {
     public Response studentsByEmail(@PathParam("email") String email) {
 
         try{
-            StudentModel student = sal.findByEmail(email);
-            System.out.println("%%%%%%%%%%%%%%%%%% " + student + " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-            return Response.ok(student).build();
+            StudentModel studentByEmail = sal.findByEmail(email);
+            System.out.println("%%%%%%%%%%%%%%%%%% " + studentByEmail  + " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            return Response.ok(studentByEmail).build();
         }catch (Exception e){
             return Response.status(Response.Status.NOT_FOUND).entity("{\"Student could not be found\"}").build();
         }

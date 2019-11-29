@@ -28,9 +28,10 @@ public class Subject implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Long id;
 
-    @Column
+    @Column(name= "title", unique = true )
     private String title;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

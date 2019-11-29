@@ -5,10 +5,7 @@ import se.alten.schoolproject.entity.Student;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 
 
@@ -27,6 +24,14 @@ public class StudentTransaction implements StudentTransactionAccess{
         String select = "SELECT s from Student s";
         Query query = entityManager.createQuery(select);
         return query.getResultList();
+    }
+
+    @Override
+    public Student studentByEmail(String email){
+        String queryStr = "SELECT s FROM Student s WHERE s.email = :email";
+        TypedQuery<Student> query = entityManager.createQuery(queryStr, Student.class);
+        query.setParameter("email", email);
+        return query.getSingleResult();
     }
 
     @Override

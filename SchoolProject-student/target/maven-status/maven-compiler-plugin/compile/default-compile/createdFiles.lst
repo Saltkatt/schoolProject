@@ -1,5 +1,6 @@
 se\alten\schoolproject\transaction\StudentTransactionAccess.class
 se\alten\schoolproject\entity\Subject.class
+se\alten\schoolproject\exceptions\BadDataRequestException.class
 se\alten\schoolproject\dao\SchoolAccessLocal.class
 se\alten\schoolproject\exceptions\ConflictExceptionMapper.class
 se\alten\schoolproject\transaction\SubjectTransaction.class
@@ -11,6 +12,7 @@ se\alten\schoolproject\rest\SubjectController.class
 se\alten\schoolproject\exceptions\BadRequestExceptionMapper.class
 se\alten\schoolproject\exceptions\ExpectationFailedException.class
 se\alten\schoolproject\transaction\StudentTransaction.class
+se\alten\schoolproject\rest\ExceptionResponse.class
 se\alten\schoolproject\dao\SchoolDataAccess.class
 se\alten\schoolproject\dao\SchoolAccessRemote.class
 se\alten\schoolproject\exceptions\GeneralExceptionMapper.class

@@ -2,6 +2,7 @@ C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\
 C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\exceptions\NotFoundExceptionMapper.java
 C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\transaction\StudentTransactionAccess.java
 C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\exceptions\NotAcceptableExceptionMapper.java
+C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\rest\ExceptionResponse.java
 C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\dao\SchoolDataAccess.java
 C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\exceptions\ExpectationFailedException.java
 C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\transaction\SubjectTransaction.java
@@ -17,4 +18,5 @@ C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\
 C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\dao\SchoolAccessLocal.java
 C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\entity\Subject.java
 C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\rest\SubjectController.java
+C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\exceptions\BadDataRequestException.java
 C:\Users\Elin\Java-programmering\JavaEE\SchoolProject\SchoolProject-student\src\main\java\se\alten\schoolproject\model\SubjectModel.java

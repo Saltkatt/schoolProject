@@ -34,8 +34,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Inject
     SubjectTransactionAccess subjectTransactionAccess;
 
-
-
     @Override
     public List<Student> listAllStudents()throws NotFoundException{
 
@@ -82,6 +80,19 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         return findEmail = new StudentModel();
     }
 
+    @Override
+    public Student getStudentByEmail(String email){
+
+        Student foundStudent = studentTransactionAccess.studentByEmail(email);
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+        System.out.println(foundStudent.toString());
+
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+        return foundStudent;
+    }
+
 
     /**
      * Lösning resultat av parprogrammering med Filip Christoffersson.
@@ -124,6 +135,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public void removeStudent(String studentEmail) {
 
+        //todo: check still works
         if(findByEmail(studentEmail).getEmail().equals(studentEmail)) {
             studentTransactionAccess.removeStudent(studentEmail);
         }
@@ -173,16 +185,32 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         return t;
     }
 
-    public SubjectModel getSubjectByName(String title){
-        List<Subject> subjectList = subjectTransactionAccess.listAllSubjects();
-        SubjectModel findSubject = new SubjectModel();
+    @Override
+    public Subject listSubjectsByName(String title){
 
-        for(Subject s: subjectList){
+        Subject foundSubject = subjectTransactionAccess.listSubjectsByTitle(title);
+
+        return foundSubject;
+    }
+
+    @Override
+    public SubjectModel getSubjectByName(String title){
+        List <Subject> originalList = subjectTransactionAccess.listAllSubjects();
+        SubjectModel findSubject;
+
+        //For-each loop through originalList,
+        for (Subject s: originalList) {
+            //if title from orginalList equals input title,
             if(s.getTitle().equals(title)){
+                //put information s in a new subjectModel
                 findSubject = subjectModel.toModel(s);
+                //return the new model
+                return findSubject;
             }
         }
-        return findSubject;
+        //if not equal to title return empty model
+        return findSubject = new SubjectModel();
+
     }
 
     @Override
@@ -209,7 +237,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
          *
          */
 
-        String email = "No email";
+       String email = "No email";
 
         JsonReader reader = Json.createReader(new StringReader(studentEmail));
         JsonObject jsonObject = reader.readObject();
@@ -220,20 +248,11 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
             System.out.println("JSON re-write: " + email + " ---------------------------------------------------------");
         }
 
-        SubjectModel subjectRetrieved = getSubjectByName(title);
-        StudentModel studentFound = findByEmail(email);
-        Subject sub = subject.toEntity(subjectRetrieved);
-        //student entity
-        Student stud = student.toEntity(studentFound);
-        //spara mot databas med .add
-        sub.getStudentSet().add(stud);
-        System.out.println("////////////////////////////// " + studentFound.getEmail() + " ///////////////////////////////////");
-        System.out.println("////////////////////////////// " + studentFound.getFirstname() + " ///////////////////////////////////");
-        System.out.println("////////////////////////////// " + studentFound.getId() + " ///////////////////////////////////");
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%" + subjectRetrieved + "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" );
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@" + sub + "@@@@@@@@@@@@@@@@@@@");
-        //System.out.println("###################### " + student.toString() + " ################");
+        //Subject subject = subject.toEntity(listSubjectsByName(title));
+        Student student = getStudentByEmail(email);
+        Subject subject = listSubjectsByName(title);
 
+        subject.getStudentSet().add(student);
 
     }
 

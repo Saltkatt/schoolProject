@@ -22,6 +22,14 @@ public class SubjectTransaction implements SubjectTransactionAccess{
     }
 
     @Override
+    public Subject listSubjectsByTitle(String title) {
+        String queryStr = "SELECT sub FROM Subject sub WHERE sub.title IN :title";
+        TypedQuery<Subject> query = entityManager.createQuery(queryStr, Subject.class);
+        query.setParameter("title", title);
+        return query.getSingleResult();
+    }
+
+    @Override
     public Subject addSubject(Subject subject) {
         try {
             entityManager.persist(subject);
@@ -33,6 +41,17 @@ public class SubjectTransaction implements SubjectTransactionAccess{
         }
     }
 
+    public Subject updatePartial(Subject subject){
+        try{
+            entityManager.merge(subject);
+            entityManager.flush();
+            return subject;
+        }catch(PersistenceException pe){
+            return subject;
+        }
+    }
+
+/*
     @Override
     public List<Subject> getSubjectByName(List<String> subject) {
 
@@ -42,6 +61,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 
         return query.getResultList();
     }
+*/
 
    /* @Override
     public void updateSubjectPartial(Subject subject) {
