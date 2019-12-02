@@ -51,6 +51,12 @@ POST /student/add
 delete student:
 DELETE /student/{email}
 
+delete teacher:
+DELETE /teacher/{email}
+
+delete subject:
+DELETE /subject/{title}
+
 update student:
 PUT /student?firstname={firstname}&lastname={lastname}&email={email}
 
@@ -62,6 +68,23 @@ PATCH /student/{email}
 	"lastname":"lastname",
 	"email": "email"
 }
+
+updateJoinTableStudent
+PATCH /subject/title
+
+{
+	"email": "email"
+}
+
+
+updateJoinTableTeacher
+PATCH /subject/teacher/title
+
+{
+	"email": "email"
+}
+
+
 
 ## Pair programming
 Worked with Filip Christofferson on some of the solutions.
