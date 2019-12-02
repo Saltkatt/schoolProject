@@ -14,7 +14,7 @@ public interface TeacherTransactionAccess {
 
     Teacher addTeacher(Teacher teacherToAdd);
 
-    void removeTeacher(Teacher teacher);
+    void removeTeacher(String teacher);
 
-    void updateTeacher(String firstname, String lastname, String email);
+    //void updateTeacher(String firstname, String lastname, String email);
 }

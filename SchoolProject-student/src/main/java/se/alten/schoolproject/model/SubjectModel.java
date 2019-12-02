@@ -18,6 +18,7 @@ public class SubjectModel {
     private Long id;
     private String title;
     private Set<String> students = new HashSet<>();
+    private Set<String> teachers = new HashSet<>();
 
     public SubjectModel toModel(Subject subjectToAdd) {
         SubjectModel subjectModel = new SubjectModel();
@@ -25,6 +26,9 @@ public class SubjectModel {
         subjectModel.setTitle(subjectToAdd.getTitle());
         subjectToAdd.getStudentSet().forEach(student -> {
             subjectModel.students.add(student.getEmail());
+        });
+        subjectToAdd.getTeacherSet().forEach(teacher -> {
+            subjectModel.teachers.add(teacher.getEmail());
         });
         return subjectModel;
     }
@@ -38,6 +42,9 @@ public class SubjectModel {
             sm.setTitle(temp.getTitle());
             temp.getStudentSet().forEach(student -> {
                 sm.students.add(student.getEmail());
+            });
+            temp.getTeacherSet().forEach(teacher -> {
+                sm.teachers.add(teacher.getEmail());
             });
 
             modelList.add(sm);

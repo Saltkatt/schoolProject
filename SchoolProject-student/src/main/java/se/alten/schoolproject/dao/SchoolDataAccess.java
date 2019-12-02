@@ -42,6 +42,12 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Inject
     TeacherTransactionAccess teacherTransactionAccess;
 
+    //List<Student> originalStudentList = studentTransactionAccess.listAllStudents();
+    //List<Teacher> originalTeacherList = teacherTransactionAccess.listAllTeachers();
+    //List<Subject> originalSubjectList = subjectTransactionAccess.listAllSubjects();
+
+
+    //findAll
     @Override
     public List<Student> listAllStudents()throws NotFoundException{
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -55,6 +61,37 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
+    public List<SubjectModel> listAllSubjects() {
+
+        System.out.println("##############################################################################################");
+        List<Subject> sm = subjectTransactionAccess.listAllSubjects();
+        sm.forEach(t -> {
+            System.out.println(t.getTitle() + " from List in SchoolDataAccess");
+            System.out.println(t.getStudentSet() + "from List in SchoolDataAccess\"");
+            System.out.println(t.toString() + "from List in SchoolDataAccess\"");
+            return ;
+        });
+
+        List<SubjectModel> t = subjectModel.toModelList(subjectTransactionAccess.listAllSubjects());
+
+        return t;
+    }
+
+    //findByEmail
+    /**
+     * Method used in updateStudentToSubject() to allow for join table.
+     * @param email
+     * @return
+     */
+    @Override
+    public Student getStudentByEmail(String email){
+
+        Student foundStudent = studentTransactionAccess.studentByEmail(email);
+
+        return foundStudent;
+    }
+
+    @Override
     public Teacher getTeacherByEmail(String email) {
 
         Teacher foundTeacher = teacherTransactionAccess.findTeacherByEmail(email);
@@ -62,61 +99,16 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         return foundTeacher;
     }
 
-    @Override
-    public TeacherModel addTeacher(String newTeacher) {
-        Teacher teacherToAdd = teacher.toEntity(newTeacher);
 
-        boolean checkForEmptyVariables =
-                Stream.of(teacherToAdd.getFirstname(),
-                        teacherToAdd.getLastname(),
-                        teacherToAdd.getEmail())
-                        .anyMatch(String::isBlank);
-
-        //if boolean is true set firstname to "empty"
-        if (checkForEmptyVariables) {
-            teacherToAdd.setFirstname("empty");
-            return teacherModel.toModel(teacherToAdd);
-
-            //if email exists det firstname to "duplicate"
-        } else if (teacherToAdd.getEmail().equals(findByEmail(teacherToAdd.getEmail()).getEmail())){
-            teacherToAdd.setFirstname("duplicate");
-            return teacherModel.toModel(teacherToAdd);
-            //else add student
-        }else {
-            teacherTransactionAccess.addTeacher(teacherToAdd);
-            return teacherModel.toModel(teacherToAdd);
-        }
-
-    }
-
-    @Override
-    public StudentModel findByName(String firstname){
-
-        List<Student> originalList = studentTransactionAccess.listAllStudents();
-        StudentModel findByName;
-
-        //For-each loop through originalList,
-        for(Student s: originalList) {
-            //if firstname from orginalList equals input firstname,
-            if(s.getFirstname().equals(firstname)){
-                //put information s in a new studentModel
-                findByName = studentModel.toModel(s);
-                //return the new model
-                return findByName;
-            }
-        }
-        //if not equal to firstname return empty model
-        return findByName = new StudentModel();
-    }
 
     @Override
     public StudentModel findByEmail(String email){
 
-        List<Student> originalList = studentTransactionAccess.listAllStudents();
+        List<Student> originalStudentList = studentTransactionAccess.listAllStudents();
         StudentModel findEmail;
 
         //For-each loop through originalList,
-        for (Student s: originalList) {
+        for (Student s: originalStudentList) {
             //if email from orginalList equals input email,
             if(s.getEmail().equals(email)){
                 //put information s in a new studentModel
@@ -129,20 +121,72 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         return findEmail = new StudentModel();
     }
 
+    @Override
+    public TeacherModel findTeacherByEmail(String email) {
+
+        List<Teacher> originalTeacherList = teacherTransactionAccess.listAllTeachers();
+        TeacherModel findByEmail;
+
+        for (Teacher t:originalTeacherList) {
+            if(t.getEmail().equals(email)){
+                findByEmail = teacherModel.toModel(t);
+                return findByEmail;
+            }
+        }
+        return findByEmail = new TeacherModel();
+    }
+
+    //findByName
+    @Override
+    public StudentModel findByName(String firstname){
+
+        List<Student> originalStudentList = studentTransactionAccess.listAllStudents();
+        StudentModel findByName;
+
+        //For-each loop through originalList,
+        for(Student s: originalStudentList) {
+            //if firstname from orginalList equals input firstname,
+            if(s.getFirstname().equals(firstname)){
+                //put information s in a new studentModel
+                findByName = studentModel.toModel(s);
+                //return the new model
+                return findByName;
+            }
+        }
+        //if not equal to firstname return empty model
+        return findByName = new StudentModel();
+    }
+
     /**
-     * Method used in addStudentToSubject() to allow for join table.
-     * @param email
+     * Only used in updateStudentToSubject()
+     * @param title
      * @return
      */
     @Override
-    public Student getStudentByEmail(String email){
+    public Subject listSubjectsByName(String title){
 
-        Student foundStudent = studentTransactionAccess.studentByEmail(email);
+        Subject foundSubject = subjectTransactionAccess.listSubjectsByTitle(title);
 
-        return foundStudent;
+        return foundSubject;
+    }
+
+    @Override
+    public SubjectModel getSubjectByName(String title){
+        List<Subject> originalSubjectList = subjectTransactionAccess.listAllSubjects();
+        SubjectModel findSubject;
+
+        for (Subject s: originalSubjectList) {
+            if(s.getTitle().equals(title)){
+                findSubject = subjectModel.toModel(s);
+                return findSubject;
+            }
+        }
+        return findSubject = new SubjectModel();
+
     }
 
 
+    //Create
     /**
      * Lösning resultat av parprogrammering med Filip Christoffersson.
      * @param newStudent
@@ -159,9 +203,13 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
                         studentToAdd.getEmail())
                         .anyMatch(String::isBlank);
 
+        System.out.println("(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((");
+
+
         //if boolean is true set firstname to "empty"
         if (checkForEmptyVariables) {
             studentToAdd.setFirstname("empty");
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             return studentModel.toModel(studentToAdd);
 
             //if email exists det firstname to "duplicate"
@@ -172,11 +220,51 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         }else {
 
             studentTransactionAccess.addStudent(studentToAdd);
-
+            System.out.println(studentModel.toModel(studentToAdd));
             return studentModel.toModel(studentToAdd);
         }
     }
 
+    @Override
+    public TeacherModel addTeacher(String newTeacher) {
+        Teacher teacherToAdd = teacher.toEntity(newTeacher);
+
+        boolean checkForEmptyVariables =
+                Stream.of(teacherToAdd.getFirstname(),
+                        teacherToAdd.getLastname(),
+                        teacherToAdd.getEmail())
+                        .anyMatch(String::isBlank);
+
+        if (checkForEmptyVariables) {
+            teacherToAdd.setFirstname("empty");
+            return teacherModel.toModel(teacherToAdd);
+
+        } else if (teacherToAdd.getEmail().equals(findByEmail(teacherToAdd.getEmail()).getEmail())){
+            teacherToAdd.setFirstname("duplicate");
+            return teacherModel.toModel(teacherToAdd);
+        }else {
+            teacherTransactionAccess.addTeacher(teacherToAdd);
+            return teacherModel.toModel(teacherToAdd);
+        }
+
+    }
+
+
+    @Override
+    public SubjectModel addSubject(String newSubject) {
+
+        Subject subjectToAdd = subject.toEntity(newSubject);
+        subjectTransactionAccess.addSubject(subjectToAdd);
+        List<Student> studentsWithSubjects = new ArrayList<>();
+
+        studentsWithSubjects.forEach(student -> {
+            subjectToAdd.getStudentSet().add(student);
+        });
+
+        return subjectModel.toModel(subjectToAdd);
+    }
+
+    //Delete
     @Override
     public void removeStudent(String studentEmail) {
 
@@ -190,6 +278,29 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     }
 
+    @Override
+    public void removeTeacher(String teacherEmail) {
+        if(findTeacherByEmail(teacherEmail).getEmail().equals(teacherEmail)){
+            teacherTransactionAccess.removeTeacher(teacherEmail);
+        }
+        else{
+            throw new NotFoundException();
+        }
+    }
+
+    @Override
+    public void removeSubject(String subjectTitle) throws NotFoundException {
+        //todo: check still works
+        if(getSubjectByName(subjectTitle).getTitle().equals(subjectTitle)) {
+            subjectTransactionAccess.removeSubject(subjectTitle);
+        }
+        else{
+            throw new NotFoundException();
+        }
+    }
+
+
+    //Update
     @Override
     public void updateStudent(String firstname, String lastname, String email) {
 
@@ -217,71 +328,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public List<SubjectModel> listAllSubjects() {
-
-        System.out.println("##############################################################################################");
-        List<Subject> sm = subjectTransactionAccess.listAllSubjects();
-        sm.forEach(t -> {
-            System.out.println(t.getTitle() + " from List in SchoolDataAccess");
-            System.out.println(t.getStudentSet() + "from List in SchoolDataAccess\"");
-            System.out.println(t.toString() + "from List in SchoolDataAccess\"");
-            return ;
-        });
-
-        List<SubjectModel> t = subjectModel.toModelList(subjectTransactionAccess.listAllSubjects());
-
-        return t;
-    }
-
-    /**
-     * Only used in addStudentToSubject()
-     * @param title
-     * @return
-     */
-    @Override
-    public Subject listSubjectsByName(String title){
-
-        Subject foundSubject = subjectTransactionAccess.listSubjectsByTitle(title);
-
-        return foundSubject;
-    }
-
-    @Override
-    public SubjectModel getSubjectByName(String title){
-        List <Subject> originalList = subjectTransactionAccess.listAllSubjects();
-        SubjectModel findSubject;
-
-        //For-each loop through originalList,
-        for (Subject s: originalList) {
-            //if title from orginalList equals input title,
-            if(s.getTitle().equals(title)){
-                //put information s in a new subjectModel
-                findSubject = subjectModel.toModel(s);
-                //return the new model
-                return findSubject;
-            }
-        }
-        //if not equal to title return empty model
-        return findSubject = new SubjectModel();
-
-    }
-
-    @Override
-    public SubjectModel addSubject(String newSubject) {
-
-        Subject subjectToAdd = subject.toEntity(newSubject);
-        subjectTransactionAccess.addSubject(subjectToAdd);
-        List<Student> studentsWithSubjects = new ArrayList<>();
-
-        studentsWithSubjects.forEach(student -> {
-            subjectToAdd.getStudentSet().add(student);
-        });
-
-        return subjectModel.toModel(subjectToAdd);
-    }
-
-    @Override
-    public void addStudentToSubject(String title, String studentEmail) {
+    public void updateStudentToSubject(String title, String studentEmail) {
 
         String email = "No email";
 
@@ -301,15 +348,29 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     }
 
     @Override
-    public void removeSubject(String subjectTitle) throws NotFoundException {
-        //todo: check still works
-        if(getSubjectByName(subjectTitle).getTitle().equals(subjectTitle)) {
-            subjectTransactionAccess.removeSubject(subjectTitle);
+    public void updateTeacherToSubject(String title, String teacherEmail){
+        String email = "No email";
+
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+
+        JsonReader reader = Json.createReader(new StringReader(teacherEmail));
+        JsonObject jsonObject = reader.readObject();
+
+        if (jsonObject.containsKey("email")) {
+            JsonValue jsonValue = jsonObject.getValue("/email");
+            email = jsonValue.toString().replace("\"", "");
         }
-        else{
-            throw new NotFoundException();
-        }
+
+        Teacher teacher = getTeacherByEmail(email);
+        Subject subject = listSubjectsByName(title);
+
+        System.out.println("...........................................................................................");
+
+        subject.getTeacherSet().add(teacher);
+
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
     }
+
 
 
 

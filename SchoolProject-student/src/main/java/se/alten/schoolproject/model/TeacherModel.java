@@ -32,6 +32,7 @@ public class TeacherModel {
             teacherModel.setEmail(temp.getEmail());
             temp.getSubjectSet().forEach(subject -> {
                 teacherModel.subjects.add(subject.getTitle());
+
             });
             modelList.add(teacherModel);
 

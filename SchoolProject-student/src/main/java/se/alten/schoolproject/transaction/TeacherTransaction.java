@@ -26,6 +26,10 @@ public class TeacherTransaction implements TeacherTransactionAccess {
         String queryStr = "SELECT t FROM Teacher t WHERE t.email = :email";
         TypedQuery<Teacher> query = entityManager.createQuery(queryStr, Teacher.class);
         query.setParameter("email", email);
+        System.out.println("::::::::::QUERY:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+        System.out.println(query.getSingleResult());
+        System.out.println("::::::::::QUERY:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+
         return query.getSingleResult();
     }
 
@@ -42,7 +46,7 @@ public class TeacherTransaction implements TeacherTransactionAccess {
     }
 
     @Override
-    public void removeTeacher(Teacher teacher) {
+    public void removeTeacher(String teacher) {
         String deleteTeacher = "DELETE FROM Teacher t WHERE t.email = :email";
         Query query = entityManager.createQuery(deleteTeacher);
 
@@ -50,7 +54,7 @@ public class TeacherTransaction implements TeacherTransactionAccess {
                 .executeUpdate();
     }
 
-    @Override
+  /*  @Override
     public void updateTeacher(String firstname, String lastname, String email) {
         String queryStr = "UPDATE teacher SET firstname = :firstname, lastname = :lastname WHERE email = :email";
         Query updateQuery = entityManager.createNativeQuery(queryStr, Teacher.class);
@@ -58,7 +62,7 @@ public class TeacherTransaction implements TeacherTransactionAccess {
                 .setParameter("lastname", lastname)
                 .setParameter("email", email)
                 .executeUpdate();
-    }
+    }*/
 
 
 }

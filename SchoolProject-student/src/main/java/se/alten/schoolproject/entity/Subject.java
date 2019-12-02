@@ -44,7 +44,7 @@ public class Subject implements Serializable {
     @JoinTable(name = "subject_teacher",
             joinColumns=@JoinColumn(name="subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"))
-    private Set<Student> teacherSet = new HashSet<>();
+    private Set<Teacher> teacherSet = new HashSet<>();
 
     @Transient
     private List<String> studentsTransList = new ArrayList<>();

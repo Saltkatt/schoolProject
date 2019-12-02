@@ -67,10 +67,10 @@ public class SubjectController {
     @PATCH
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{title}")
-    public Response updateJoinTable(@PathParam("title") String title, String studentEmail){
+    public Response updateStudentJoinTable(@PathParam("title") String title, String studentEmail){
 
         try{
-           sal.addStudentToSubject(title, studentEmail);
+           sal.updateStudentToSubject(title, studentEmail);
             return Response.ok().build();
         }catch (BadRequestException e){
             return Response.status(Response.Status.NOT_FOUND).entity("{\"Subject could not be found\"}").build();
@@ -78,6 +78,24 @@ public class SubjectController {
         }
 
     }
+    @PATCH
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/teacher/{title}")
+    public Response updateTeacherJoinTable(@PathParam("title") String title, String teacherEmail){
+
+        System.out.println("---------------------------------teacherpatch------------------------------------------------");
+
+        try{
+            sal.updateTeacherToSubject(title, teacherEmail);
+            return Response.ok().build();
+        }catch (BadRequestException e){
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"Subject could not be found\"}").build();
+
+        }
+
+    }
+
+
 
     @DELETE
     @Path("{title}")

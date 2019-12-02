@@ -73,7 +73,7 @@ public class SubjectTransaction implements SubjectTransactionAccess{
 */
 
    /* @Override
-    public void addStudentToSubject(Subject subject) {
+    public void updateStudentToSubject(Subject subject) {
         String selectStudentToUpdate = "SELECT s FROM Subject s WHERE s.title = :title";
         String updateStudent = "UPDATE Subject SET firstname = :studentFirstname WHERE email = :email";
         Student studentFound = (Student)entityManager.createQuery(selectStudentToUpdate)

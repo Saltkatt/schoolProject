@@ -59,6 +59,17 @@ public class TeacherController {
         }
     }
 
+    @DELETE
+    @Path("/{email}")
+    public Response deleteTeacher(@PathParam("email") String email) {
+        try {
+            sal.removeTeacher(email);
+            return Response.ok().status(Response.Status.NO_CONTENT).build();
+        }catch (NotFoundException e){
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"Teacher could not be found\"}").build();
+        }
+    }
+
 
 
 }
