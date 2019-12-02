@@ -22,7 +22,7 @@ public class SubjectModel {
 
     public SubjectModel toModel(Subject subjectToAdd) {
         SubjectModel subjectModel = new SubjectModel();
-        subjectModel.setId(subjectToAdd.getId());
+        subjectModel.setId(null);
         subjectModel.setTitle(subjectToAdd.getTitle());
         subjectToAdd.getStudentSet().forEach(student -> {
             subjectModel.students.add(student.getEmail());

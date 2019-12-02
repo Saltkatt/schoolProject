@@ -44,7 +44,7 @@ public class TeacherModel {
 
         TeacherModel teacherModel = new TeacherModel();
 
-        teacherModel.setId(teacher.getId());
+        teacherModel.setId(null);
         teacherModel.setFirstname(teacher.getFirstname());
         teacherModel.setLastname(teacher.getLastname());
         teacherModel.setEmail(teacher.getEmail());

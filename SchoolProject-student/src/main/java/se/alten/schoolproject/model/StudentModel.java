@@ -58,7 +58,7 @@ public class StudentModel {
 
         StudentModel studentModel = new StudentModel();
 
-        studentModel.setId(student.getId());
+        studentModel.setId(null);
         studentModel.setFirstname(student.getFirstname());
         studentModel.setLastname(student.getLastname());
         studentModel.setEmail(student.getEmail());

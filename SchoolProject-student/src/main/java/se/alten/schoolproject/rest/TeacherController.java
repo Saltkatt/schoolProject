@@ -3,6 +3,7 @@ package se.alten.schoolproject.rest;
 
 import lombok.NoArgsConstructor;
 import se.alten.schoolproject.dao.SchoolAccessLocal;
+import se.alten.schoolproject.model.StudentModel;
 import se.alten.schoolproject.model.TeacherModel;
 
 import javax.ejb.Stateless;
@@ -31,6 +32,35 @@ public class TeacherController {
 
         catch ( Exception e ) {
             return Response.status(Response.Status.CONFLICT).build();
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/find/{email}")
+    public Response getTeacherByEmail(@PathParam("email") String teacherEmail){
+        try{
+            TeacherModel teacherByEmail = sal.findTeacherByEmail(teacherEmail);
+            System.out.println("%%%%%%%%%%%%%%%%%% " + teacherByEmail  + " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            return Response.ok(teacherByEmail).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"Teacher could not be found\"}").build();
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{firstname}")
+    public Response getTeacherByName(@PathParam("firstname") String firstname){
+
+        try {
+            TeacherModel teacher = sal.findTeacherByName(firstname);
+            System.out.println("---------------------teacher: " + teacher + "------------------------------------------" );
+            return Response.ok(teacher).build();
+
+        }catch (Exception e) {
+            e.getMessage();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 
@@ -69,7 +99,5 @@ public class TeacherController {
             return Response.status(Response.Status.NOT_FOUND).entity("{\"Teacher could not be found\"}").build();
         }
     }
-
-
 
 }

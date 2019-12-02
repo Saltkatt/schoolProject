@@ -91,6 +91,11 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         return foundStudent;
     }
 
+    /**
+     * Method used in updateTeacherToSubject() to allow for join table.
+     * @param email
+     * @return
+     */
     @Override
     public Teacher getTeacherByEmail(String email) {
 
@@ -98,8 +103,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
         return foundTeacher;
     }
-
-
 
     @Override
     public StudentModel findByEmail(String email){
@@ -183,6 +186,20 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
         }
         return findSubject = new SubjectModel();
 
+    }
+
+    @Override
+    public TeacherModel findTeacherByName(String firstname) {
+        List<Teacher> originalTeacherList = teacherTransactionAccess.listAllTeachers();
+        TeacherModel findByName;
+
+        for(Teacher t: originalTeacherList) {
+            if(t.getFirstname().equals(firstname)){
+                findByName = teacherModel.toModel(t);
+                return findByName;
+            }
+        }
+        return findByName = new TeacherModel();
     }
 
 

@@ -37,6 +37,8 @@ public interface SchoolAccessLocal {
 
     SubjectModel getSubjectByName(String title);
 
+    TeacherModel findTeacherByName(String firstname);
+
     //Create
 
     TeacherModel addTeacher(String teacherModel);
@@ -60,7 +62,6 @@ public interface SchoolAccessLocal {
     void updateStudentToSubject(String title, String studentEmail);
 
     void updateTeacherToSubject(String title, String teacherEmail);
-
 
 
 
