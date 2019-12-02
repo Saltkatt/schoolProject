@@ -42,10 +42,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Inject
     TeacherTransactionAccess teacherTransactionAccess;
 
-    //List<Student> originalStudentList = studentTransactionAccess.listAllStudents();
-    //List<Teacher> originalTeacherList = teacherTransactionAccess.listAllTeachers();
-    //List<Subject> originalSubjectList = subjectTransactionAccess.listAllSubjects();
-
 
     //findAll
     @Override
@@ -285,7 +281,6 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
     @Override
     public void removeStudent(String studentEmail) {
 
-        //todo: check still works
         if(findByEmail(studentEmail).getEmail().equals(studentEmail)) {
             studentTransactionAccess.removeStudent(studentEmail);
         }
@@ -307,7 +302,7 @@ public class SchoolDataAccess implements SchoolAccessLocal, SchoolAccessRemote {
 
     @Override
     public void removeSubject(String subjectTitle) throws NotFoundException {
-        //todo: check still works
+
         if(getSubjectByName(subjectTitle).getTitle().equals(subjectTitle)) {
             subjectTransactionAccess.removeSubject(subjectTitle);
         }
